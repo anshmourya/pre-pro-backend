@@ -7,6 +7,7 @@ const dashboardRouter = require('./src/routes/dashboard');
 // Load environment variables
 dotenv.config();
 
+require('./src/config/db');
 const app = express();
 
 
