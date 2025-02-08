@@ -5,7 +5,6 @@ const youtube = require('../config/youtube');
 //with pagination
 const getVideos = async (req, res) => {
     try {
-        console.log(req.user);
         const response = await youtube.search.list({
             type: ['video'],
             part: ['snippet'],

@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const dashboardRouter = require('./src/routes/dashboard');
+const userRouter = require('./src/routes/user');
 const { setupKinde, jwtVerify, protectRoute } = require("@kinde-oss/kinde-node-express");
 const axios = require('axios');
 dotenv.config();
@@ -48,7 +49,7 @@ app.get('/ping', (req, res) => res.status(200).send('pong'));
 
 app.use(require('./src/utils/response/responseHandler'));
 app.use('/dashboard', dashboardRouter);
-
+app.use('/user', userRouter);
 // Start server
 
 
