@@ -1,11 +1,14 @@
+const dotenv = require('dotenv');
+dotenv.config();
 const express = require('express');
 const cors = require('cors');
-const dotenv = require('dotenv');
 const dashboardRouter = require('./src/routes/dashboard');
+const tagsRouter = require('./src/routes/tags');
 const userRouter = require('./src/routes/user');
-const { setupKinde, jwtVerify, protectRoute } = require("@kinde-oss/kinde-node-express");
+const { setupKinde, protectRoute } = require("@kinde-oss/kinde-node-express");
+
 const axios = require('axios');
-dotenv.config();
+
 
 const config = {
     clientId: process.env.KINDE_CLIENT_ID,
@@ -50,6 +53,7 @@ app.get('/ping', (req, res) => res.status(200).send('pong'));
 app.use(require('./src/utils/response/responseHandler'));
 app.use('/dashboard', dashboardRouter);
 app.use('/user', userRouter);
+app.use('/tags', tagsRouter);
 // Start server
 
 

@@ -1,4 +1,19 @@
 const mongoose = require("mongoose");
+const mongoosePaginate = require('mongoose-paginate-v2');
+
+const customLabels = {
+    totalDocs: 'itemCount',
+    docs: 'data',
+    limit: 'perPage',
+    page: 'currentPage',
+    nextPage: 'next',
+    prevPage: 'prev',
+    totalPages: 'pageCount',
+    pagingCounter: 'slNo',
+    meta: 'paginator'
+}
+
+mongoosePaginate.paginate.options = { customLabels: customLabels }
 
 const tagSchema = new mongoose.Schema({
     name: {
@@ -12,5 +27,7 @@ const tagSchema = new mongoose.Schema({
         type: String,
     },
 }, { timestamps: true });
+
+tagSchema.plugin(mongoosePaginate);
 
 module.exports = mongoose.model("Tag", tagSchema);

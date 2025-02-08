@@ -3,7 +3,7 @@ const express = require('express');
 
 const router = express.Router();
 const dashboardController = require('../controller/dashboard');
-const { setupKinde, protectRoute, getUser } = require("@kinde-oss/kinde-node-express");
+const { getUser } = require("@kinde-oss/kinde-node-express");
 
 
 
