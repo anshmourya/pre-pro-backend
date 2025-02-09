@@ -10,11 +10,9 @@ const userSchema = new mongoose.Schema({
     },
     email: {
         type: String,
-        unique: true,
     },
     kindeId: {
         type: String,
-        unique: true,
         required: true
     }
 }, { timestamps: true });
