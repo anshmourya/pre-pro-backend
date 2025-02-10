@@ -98,7 +98,7 @@ const getTagsAssociatedWithUser = async (req, res) => {
     });
     return res.success({
         message: "Tags fetched successfully",
-        data: user.tags
+        data: user?.tags
     })
 }
 
