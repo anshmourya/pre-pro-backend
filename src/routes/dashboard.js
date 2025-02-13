@@ -10,7 +10,7 @@ const { getUser } = require("@kinde-oss/kinde-node-express");
 
 
 router.get('/', getUser, dashboardController.getVideos);
-
+router.get('/video-details', dashboardController.getVideoDetails);
 
 
 module.exports = router;

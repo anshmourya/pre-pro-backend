@@ -33,6 +33,9 @@ const responseHandler = (req, res, next) => {
   res.unAuthorized = (data = {}) => {
     res.status(responseCode.unAuthorized).json(responseBody.unAuthorized(data));
   };
+  res.tooManyRequests = (data = {}) => {
+    res.status(responseCode.tooManyRequests).json(responseBody.tooManyRequests(data));
+  };
   next();
 };
 

@@ -10,7 +10,8 @@ const userSchema = new mongoose.Schema({
     },
     email: {
         type: String,
-        index: false
+        index: false,
+        unique:false
     },
     kindeId: {
         type: String,

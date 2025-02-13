@@ -5,4 +5,5 @@ module.exports = {
   unAuthorized: 401,
   validationError: 422,
   recordNotFound: 200,
+  tooManyRequests: 429,
 };

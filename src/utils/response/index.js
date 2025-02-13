@@ -42,4 +42,10 @@ module.exports = {
     message: data.message || 'You are not authorized to access the request',
     data: data.data && Object.keys(data.data).length ? data.data : null,
   }),
+
+  tooManyRequests: (data = {}) => ({
+    status: responseStatus.tooManyRequests,
+    message: data.message || 'Too many requests.',
+    data: data.data && Object.keys(data.data).length ? data.data : null,
+  }),
 };
