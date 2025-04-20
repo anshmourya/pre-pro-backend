@@ -75,7 +75,11 @@ const checkUser = async (req, res) => {
 const getMe = async (req, res) => {
     try {
         const { id: kindeId } = req.user;
-        const user = await User.findOne({ kindeId });
+        const user = await User.findOne({ kindeId }).populate({
+            path: 'tags',
+            select: 'name',
+            limit: 5
+        });
 
         if (user) {
             res.success({
@@ -120,7 +124,7 @@ const updateMe = async (req, res) => {
         const data = await axios(options)
         res.success({
             message: 'User updated successfully',
-            data: data.data 
+            data: data.data
         })
     } catch (error) {
         console.error(error);

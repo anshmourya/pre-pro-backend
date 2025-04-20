@@ -1,7 +1,6 @@
 const Tag = require('../models/tag');
 const User = require('../models/user');
-
-
+const { ObjectId } = require('mongodb');
 
 // add tag
 const addTag = async (req, res) => {
@@ -44,28 +43,32 @@ const getTags = async (req, res) => {
 const associateTagsWithUser = async (req, res) => {
     try {
         const { id: kindeId } = req.user;
-        const tagIds = req.body;
+        const tagActions = req.body; // [{ tagId: string, action: 'add' | 'remove' }]
 
         // First, find the user to check their current tags
-        const user = await User.findOne({
-            kindeId
-        });
+        const user = await User.findOne({ kindeId });
 
         if (!user) {
             return res.badRequest({
                 message: "User not found"
-            })
+            });
         }
 
-        // Separate tags into those to add and those to remove
-        const tagsToRemove = tagIds.filter(tagId =>
-            user.tags.includes(tagId)
-        );
-        const tagsToAdd = tagIds.filter(tagId =>
-            !user.tags.includes(tagId)
-        );
+        // Convert user.tags ObjectIds to string for comparison
+        const userTagIds = user.tags.map(tag => tag?.toString());
 
-        // Perform updates sequentially
+        // Separate tags to add and remove based on action
+        const tagsToAdd = tagActions
+            .filter(t => t.action === 'add' && !userTagIds.includes(t.tagId.toString()))
+            .map(t => t.tagId);
+
+        const tagsToRemove = tagActions
+            .filter(t => t.action === 'remove' && userTagIds.includes(t.tagId.toString()))
+            .map(t => t.tagId);
+
+
+
+        // Perform updates
         if (tagsToRemove.length > 0) {
             await User.findByIdAndUpdate(user._id, {
                 $pull: { tags: { $in: tagsToRemove } }
