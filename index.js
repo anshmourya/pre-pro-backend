@@ -5,7 +5,7 @@ const cors = require('cors');
 const dashboardRouter = require('./src/routes/dashboard');
 const tagsRouter = require('./src/routes/tags');
 const userRouter = require('./src/routes/user');
-const { setupKinde, protectRoute } = require("@kinde-oss/kinde-node-express");
+const { setupKinde, protectRoute, } = require("@kinde-oss/kinde-node-express");
 
 const axios = require('axios');
 

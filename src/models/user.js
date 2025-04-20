@@ -11,12 +11,15 @@ const userSchema = new mongoose.Schema({
     email: {
         type: String,
         index: false,
-        unique:false
+        unique: false
     },
     kindeId: {
         type: String,
         required: true
-    }
+    },
+    totalStreak: [{
+        type: Date,
+    }],
 }, { timestamps: true });
 
 module.exports = mongoose.model('User', userSchema);

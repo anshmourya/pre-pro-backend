@@ -46,7 +46,7 @@ const qnaConfig = {
             }
         },
         required: [
-            "data"
+            "data",
         ]
     },
 };

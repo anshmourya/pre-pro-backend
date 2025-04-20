@@ -1,5 +1,5 @@
 const User = require('../models/user');
-
+const axios = require('axios')
 // @desc    Register user
 // @route   POST /api/users
 // @access  Public
@@ -20,12 +20,63 @@ const registerUser = async (req, res) => {
     }
 }
 
+//calculate totalStreak
+// const totalStreak = () => {
+
+// }
+
 //check user is registered or not
 const checkUser = async (req, res) => {
     try {
         const { kindeId } = req.query;
         const user = await User.findOne({ kindeId });
-       
+
+        if (user) {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0); // Normalize to midnight
+
+            let lastStreakDate = null;
+            if (user.totalStreak.length > 0) {
+                lastStreakDate = new Date(user.totalStreak[user.totalStreak.length - 1]);
+                lastStreakDate.setHours(0, 0, 0, 0); // Normalize to midnight
+            }
+
+            if (!lastStreakDate || lastStreakDate.getTime() !== today.getTime()) {
+                // Only add if today is not already in streak
+                user.totalStreak.push(today);
+            }
+
+            await user.save();
+
+            res.success({
+                message: 'User is registered',
+                data: {
+                    user,
+                    found: true
+                }
+            });
+        } else {
+            res.recordNotFound({
+                message: 'User is not registered',
+                data: {
+                    found: false
+                }
+            });
+        }
+    } catch (error) {
+        console.error(error);
+        res.internalServerError({
+            message: 'Internal Server Error',
+            error: error.message
+        });
+    }
+}
+//get user details
+const getMe = async (req, res) => {
+    try {
+        const { id: kindeId } = req.user;
+        const user = await User.findOne({ kindeId });
+
         if (user) {
             res.success({
                 message: 'User is registered',
@@ -52,14 +103,40 @@ const checkUser = async (req, res) => {
 }
 
 
-
-
-
+const updateMe = async (req, res) => {
+    try {
+        const { id: kindeId } = req.user;
+        console.log(req.user);
+        const options = {
+            method: 'PATCH',
+            url: process.env.KINDE_ISSUER_BASE_URL + '/api/v1/user',
+            params: { id: kindeId },
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${req.user.token}`
+            },
+            data: req.body
+        }
+        const data = await axios(options)
+        res.success({
+            message: 'User updated successfully',
+            data: data.data 
+        })
+    } catch (error) {
+        console.error(error);
+        res.internalServerError({
+            message: 'Internal Server Error',
+            error: error.message
+        });
+    }
+}
 
 
 
 
 module.exports = {
     registerUser,
-    checkUser
+    checkUser,
+    getMe,
+    updateMe
 }
