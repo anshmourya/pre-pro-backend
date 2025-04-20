@@ -20,10 +20,6 @@ const registerUser = async (req, res) => {
     }
 }
 
-//calculate totalStreak
-// const totalStreak = () => {
-
-// }
 
 //check user is registered or not
 const checkUser = async (req, res) => {
@@ -110,30 +106,31 @@ const getMe = async (req, res) => {
 const updateMe = async (req, res) => {
     try {
         const { id: kindeId } = req.user;
-        console.log(req.user);
         const options = {
             method: 'PATCH',
             url: process.env.KINDE_ISSUER_BASE_URL + '/api/v1/user',
             params: { id: kindeId },
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${req.user.token}`
+                Authorization: 'Bearer ' + process.env.ACCESS_TOKEN
             },
             data: req.body
         }
         const data = await axios(options)
+        await User.findOneAndUpdate({ kindeId }, req.body)
         res.success({
             message: 'User updated successfully',
             data: data.data
         })
     } catch (error) {
-        console.error(error);
+        console.error(error.response.data);
         res.internalServerError({
             message: 'Internal Server Error',
             error: error.message
         });
     }
 }
+
 
 
 
